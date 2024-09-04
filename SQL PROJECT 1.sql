@@ -1,0 +1,101 @@
+
+CREATE DATABASE PROJ;
+
+USE PROJ;
+
+-- RETRIEVE THE WHOLE-DATA
+
+SELECT * 
+FROM   PROJ_DATA;
+
+
+-- QUES 1  RETRIEVE TH DATA TO FIND THE AVERAGE PRICE PER ROOM--
+
+SELECT AVG(AVG_PRICE_PER_ROOM)
+from PROJ_DATA;
+ 
+# OBSERVATION:
+-- WE OBSERVE THAT THERE ARE SOO MANY ROOMS IN THE HOTEL.  
+
+
+
+
+
+
+--  QUES 2 RETRIEVE THE DATA TO FIND BOOKING STATUS IS CANCELED OF THE HOTEL)--
+
+SELECT BOOKING_STATUS
+FROM PROJ_DATA
+WHERE BOOKING_STATUS = 'CANCELED';
+
+
+-- QUES 3 RETRIEVE THE DATA TO FIND  MEAL-PLAN -2 IS ORDERED IN THE ROOM-- 
+
+SELECT TYPE_OF_MEAL_PLAN
+FROM PROJ_DATA 
+WHERE TYPE_OF_MEAL_PLAN = 'MEAL PLAN 2';
+ 
+
+
+-- QUES 4  WRITE A SQL QUERY TO FIND NUMBER OF GUESTS REPEATED --
+SELECT count(REPEATED_GUEST) AS NO_OF_GUESTS_REPEATED 
+FROM PROJ_DATA;
+ 
+ 
+ -- QUES 5  Write a query to find more than 2 adults and more than 2 children.--
+ SELECT NO_OF_ADULTS,NO_OF_CHILDREN
+ FROM PROJ_DATA
+ WHERE no_of_adults < 2
+ AND NO_OF_CHILDREN <2;
+ 
+ 
+   -- QUES 6 Write a query to delete all bookings that have been canceled.--
+   
+DELETE FROM PROJ_DATA WHERE booking_status = 'Canceled';
+
+
+  -- QUES 7 WRITE A SQL QUERY  TO FIND market segment type (e.g., Online, Offline) has the highest booking rate? --
+  SELECT 
+    market_segment_type, 
+    COUNT(*) AS total_bookings,
+    SUM(CASE WHEN booking_status = 'Canceled' THEN 1 ELSE 0 END) AS total_cancellations,
+    (SUM(CASE WHEN booking_status = 'Canceled' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS cancellation_rate
+FROM PROJ_DATA
+GROUP BY market_segment_type
+ORDER BY cancellation_rate DESC
+LIMIT 1;
+
+
+ 
+ -- QUES 8 WRITE A SQL QUERY TO FIND THE the average number of adults per booking by market segment. --
+ 
+ SELECT MARKET_SEGMENT_TYPE, AVG(NO_OF_ADULTS) AS AVERAGE_ADULTS
+ FROM PROJ_DATA
+ GROUP BY MARKET_SEGMENT_TYPE;
+ 
+ 
+ 
+ -- QUES 9 WRITE A SQL QUERY TO FIND THE  the most frequently reserved room type --
+ 
+ SELECT ROOM_TYPE_RESERVED, count(*) AS TOTAL_RESERVED_ROOMS
+ FROM PROJ_DATA 
+ GROUP BY ROOM_TYPE_RESERVED
+ ORDER BY count(*) DESC
+LIMIT 1; 
+
+
+ -- QUES 10 WRITE A SQL QUERY TO FIND the room type that generates the highest revenue --
+ SELECT ROOM_TYPE_RESERVED, sum(AVG_PRICE_PER_ROOM *(NO_OF_WEEKEND_NIGHTS + NO_OF_WEEK_NIGHTS)) AS TOTAL_REVENUE
+ FROM PROJ_DATA
+ GROUP BY ROOM_TYPE_RESERVED
+ order by TOTAL_REVENUE DESC
+ LIMIT 1;
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
